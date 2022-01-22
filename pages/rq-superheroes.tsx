@@ -10,7 +10,7 @@ const fetchSuperheroes = () => {
 };
 
 const RQSuperheroes: NextPage = () => {
-  const { isLoading, data, isError, error } = useQuery(
+  const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
     "superheroes",
     fetchSuperheroes,
     {
@@ -37,10 +37,17 @@ const RQSuperheroes: NextPage = () => {
       // Default is false
       // continue refetching if browser is not in focus
       refetchIntervalInBackground: false,
+
+      // Default is true
+      // if false, data will not fetch after mount.
+      // usually data is fetched on click or conditionally
+      enabled: false,
     }
   );
 
-  if (isLoading) {
+  const handleRefetch = () => refetch();
+
+  if (isLoading || isFetching) {
     return <h2>Loading...</h2>;
   }
 
@@ -51,6 +58,7 @@ const RQSuperheroes: NextPage = () => {
   return (
     <>
       <h2>RQ Superheroes</h2>
+      <button onClick={handleRefetch}>Fetch heroes</button>
       {data?.data.map((hero) => (
         <div key={hero.id}>{hero.name}</div>
       ))}
