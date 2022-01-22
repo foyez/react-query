@@ -5,12 +5,16 @@ import axios, { AxiosResponse } from "axios";
 import type { Superhero } from "../types";
 import { formatErrorMessage } from "../utils";
 
+type ShortSuperhero = Omit<Superhero, "alterEgo">;
+
 const fetchSuperheroes = () => {
-  return axios.get<Superhero[]>("http://localhost:3000/api/superheroes");
+  return axios.get<ShortSuperhero[]>("http://localhost:3000/api/superheroes");
 };
 
 const RQSuperheroes: NextPage = () => {
-  const onSuccess = (data: AxiosResponse<Superhero[], any> | undefined) => {
+  const onSuccess = (
+    data: AxiosResponse<ShortSuperhero[], any> | undefined
+  ) => {
     console.log("Perform side effect after data fetching", data);
   };
 
@@ -53,6 +57,15 @@ const RQSuperheroes: NextPage = () => {
 
       onSuccess,
       onError,
+
+      // Transforming data
+      select: (data) => {
+        const shortSuperheroes = data.data.map(({ id, name }) => ({
+          id,
+          name,
+        }));
+        return { ...data, data: shortSuperheroes };
+      },
     }
   );
 
