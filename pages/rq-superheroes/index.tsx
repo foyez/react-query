@@ -1,9 +1,10 @@
 import type { NextPage } from "next";
+import Link from "next/link";
 import { AxiosResponse } from "axios";
 
-import { formatErrorMessage } from "../utils";
-import { useSuperheroesData } from "../hooks/useSuperheroesData";
-import type { Superhero } from "../types";
+import { formatErrorMessage } from "../../utils";
+import { useSuperheroesData } from "../../hooks/useSuperheroesData";
+import type { Superhero } from "../../types";
 
 type ShortSuperhero = Omit<Superhero, "alterEgo">;
 
@@ -36,7 +37,9 @@ const RQSuperheroes: NextPage = () => {
       <h2>RQ Superheroes</h2>
       <button onClick={handleRefetch}>Fetch heroes</button>
       {data?.data.map((hero) => (
-        <div key={hero.id}>{hero.name}</div>
+        <div key={hero.id}>
+          <Link href={`/rq-superheroes/${hero.id}`}>{hero.name}</Link>
+        </div>
       ))}
     </>
   );
