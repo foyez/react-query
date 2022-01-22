@@ -20,5 +20,17 @@
     { "id": 1, "name": "Mithu" },
     { "id": 2, "name": "Sohel" },
     { "id": 3, "name": "Rupom" }
+  ],
+  "users": [
+    {
+      "id": "user@email.com",
+      "channelId": "pipilika"
+    }
+  ],
+  "channels": [
+    {
+      "id": "pipilika",
+      "courses": ["react", "nodejs"]
+    }
   ]
 }
