@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import { useQuery } from "react-query";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 import type { Superhero } from "../types";
 import { formatErrorMessage } from "../utils";
@@ -10,6 +10,14 @@ const fetchSuperheroes = () => {
 };
 
 const RQSuperheroes: NextPage = () => {
+  const onSuccess = (data: AxiosResponse<Superhero[], any> | undefined) => {
+    console.log("Perform side effect after data fetching", data);
+  };
+
+  const onError = (error: Error) => {
+    console.log("Perform side effect after encountering error", error);
+  };
+
   const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
     "superheroes",
     fetchSuperheroes,
@@ -42,6 +50,9 @@ const RQSuperheroes: NextPage = () => {
       // if false, data will not fetch after mount.
       // usually data is fetched on click or conditionally
       enabled: false,
+
+      onSuccess,
+      onError,
     }
   );
 
