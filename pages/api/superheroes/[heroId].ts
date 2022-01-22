@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import superheroes from "./data.json";
+import data from "../data.json";
 
 type Data = {
   id: number;
@@ -12,7 +12,7 @@ export default function handler(
   res: NextApiResponse<Data | undefined>
 ) {
   const id = req.query.heroId;
-  const hero = superheroes.find((hero) => hero.id === Number(id));
+  const hero = data.superheroes.find((hero) => hero.id === Number(id));
 
   res.status(200).json(hero);
 }
