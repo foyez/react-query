@@ -3,17 +3,20 @@ import { useQuery } from "react-query";
 
 import type { Superhero } from "../types";
 
-type ShortSuperhero = Omit<Superhero, "alterEgo">;
+export type ShortSuperhero = Omit<Superhero, "alterEgo">;
 
-const fetchSuperheroes = () => {
-  return axios.get<ShortSuperhero[]>("http://localhost:3000/api/superheroes");
+const fetchSuperheroes = async () => {
+  const { data } = await axios.get<ShortSuperhero[]>(
+    "http://localhost:3000/api/superheroes"
+  );
+  return data;
 };
 
 export const useSuperheroesData = ({
   onSuccess,
   onError,
 }: {
-  onSuccess: (data: AxiosResponse<ShortSuperhero[], any> | undefined) => void;
+  onSuccess: (data: ShortSuperhero[]) => void;
   onError: (err: Error) => void;
 }) => {
   return useQuery("superheroes", fetchSuperheroes, {
@@ -51,11 +54,11 @@ export const useSuperheroesData = ({
 
     // Transforming data
     select: (data) => {
-      const shortSuperheroes = data.data.map(({ id, name }) => ({
+      const shortSuperheroes = data.map(({ id, name }) => ({
         id,
         name,
       }));
-      return { ...data, data: shortSuperheroes };
+      return shortSuperheroes;
     },
   });
 };

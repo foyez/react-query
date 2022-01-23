@@ -9,9 +9,7 @@ import type { Superhero } from "../../types";
 type ShortSuperhero = Omit<Superhero, "alterEgo">;
 
 const RQSuperheroes: NextPage = () => {
-  const onSuccess = (
-    data: AxiosResponse<ShortSuperhero[], any> | undefined
-  ) => {
+  const onSuccess = (data: ShortSuperhero[]) => {
     console.log("Perform side effect after data fetching", data);
   };
 
@@ -36,7 +34,7 @@ const RQSuperheroes: NextPage = () => {
     <>
       <h2>RQ Superheroes</h2>
       <button onClick={handleRefetch}>Fetch heroes</button>
-      {data?.data.map((hero) => (
+      {data?.map((hero) => (
         <div key={hero.id}>
           <Link href={`/rq-superheroes/${hero.id}`}>{hero.name}</Link>
         </div>

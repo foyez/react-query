@@ -26,7 +26,7 @@ const Superhero: NextPage = () => {
 
   return (
     <div>
-      {data?.data.name} - {data?.data.alterEgo}
+      {data?.name} - {data?.alterEgo}
     </div>
   );
 };
