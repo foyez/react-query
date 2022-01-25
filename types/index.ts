@@ -3,3 +3,8 @@ export type Superhero = {
   name: string;
   alterEgo?: string;
 };
+
+export type Color = {
+  id: number;
+  label: string;
+};
