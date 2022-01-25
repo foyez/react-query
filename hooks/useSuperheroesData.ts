@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 
 import type { Superhero } from "../types";
 
@@ -8,6 +8,14 @@ export type ShortSuperhero = Omit<Superhero, "alterEgo">;
 const fetchSuperheroes = async () => {
   const { data } = await axios.get<ShortSuperhero[]>(
     "http://localhost:3000/api/superheroes"
+  );
+  return data;
+};
+
+const addSuperHero = async (hero: { name: string; alterEgo: string }) => {
+  const { data } = await axios.post<Superhero>(
+    "http://localhost:3000/api/superheroes",
+    hero
   );
   return data;
 };
@@ -61,4 +69,8 @@ export const useSuperheroesData = ({
       return shortSuperheroes;
     },
   });
+};
+
+export const useAddSuperHeroData = () => {
+  return useMutation(addSuperHero);
 };
