@@ -33,7 +33,8 @@ const RQSuperheroes: NextPage = () => {
     addHero(hero);
   };
 
-  if (isLoading || isFetching) {
+  // if (isLoading || isFetching) {
+  if (isLoading) {
     return <h2>Loading...</h2>;
   }
 

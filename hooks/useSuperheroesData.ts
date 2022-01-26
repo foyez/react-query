@@ -56,7 +56,7 @@ export const useSuperheroesData = ({
     // Default is true
     // if false, data will not fetch after mount.
     // usually data is fetched on click or conditionally
-    enabled: false,
+    // enabled: false,
 
     onSuccess,
     onError,
@@ -75,16 +75,40 @@ export const useSuperheroesData = ({
 export const useAddSuperHeroData = () => {
   const queryClient = useQueryClient();
   return useMutation(addSuperHero, {
-    onSuccess: (data) => {
-      // // need to enabled true in useQuery
-      // queryClient.invalidateQueries(RQ_KEYS.superheroes);
+    // onSuccess: (data) => {
+    //   // // need to enabled true in useQuery
+    //   // queryClient.invalidateQueries(RQ_KEYS.superheroes);
 
-      queryClient.setQueriesData<ShortSuperhero[] | undefined>(
+    //   queryClient.setQueriesData<ShortSuperhero[] | undefined>(
+    //     RQ_KEYS.superheroes,
+    //     (oldQueryData) => {
+    //       return oldQueryData && [data, ...oldQueryData];
+    //     }
+    //   );
+    // },
+
+    onMutate: async (newHero): Promise<ShortSuperhero[] | undefined> => {
+      await queryClient.cancelQueries(RQ_KEYS.superheroes);
+      const prevHeroData = queryClient.getQueryData<ShortSuperhero[]>(
+        RQ_KEYS.superheroes
+      );
+      queryClient.setQueryData<ShortSuperhero[] | undefined>(
         RQ_KEYS.superheroes,
         (oldQueryData) => {
-          return oldQueryData && [data, ...oldQueryData];
+          return (
+            oldQueryData && [{ id: Date.now(), ...newHero }, ...oldQueryData]
+          );
         }
       );
+      return prevHeroData;
+    },
+    onError: (_error, _hero, prevHeroData) => {
+      if (prevHeroData) {
+        queryClient.setQueryData(RQ_KEYS.superheroes, prevHeroData);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(RQ_KEYS.superheroes);
     },
   });
 };
