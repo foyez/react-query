@@ -1,6 +1,7 @@
 import axios from "axios";
 import type { NextPage } from "next";
 import { useQuery } from "react-query";
+import { RQ_KEYS } from "../utils/constants";
 
 const fetchUserByEmail = ({ queryKey }: { queryKey: any }) => {
   const email = queryKey[1];
@@ -14,10 +15,10 @@ const fetchCoursesByChannelId = ({ queryKey }: { queryKey: any }) => {
 
 const RQDependentQueries: NextPage = () => {
   const email = "user@email.com";
-  const { data: user } = useQuery(["user", email], fetchUserByEmail);
+  const { data: user } = useQuery([RQ_KEYS.user, email], fetchUserByEmail);
   const channelId = user?.data.channelId;
   const { data: channel } = useQuery(
-    ["courses", channelId],
+    [RQ_KEYS.courses, channelId],
     fetchCoursesByChannelId,
     { enabled: !!channelId }
   );

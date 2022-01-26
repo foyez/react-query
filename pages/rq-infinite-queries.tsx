@@ -5,6 +5,7 @@ import { useInfiniteQuery } from "react-query";
 
 import { formatErrorMessage } from "../utils";
 import type { Color } from "../types";
+import { RQ_KEYS } from "../utils/constants";
 
 const fetchColors = async ({ pageParam = 1 }): Promise<Color[]> => {
   const { data } = await axios.get(
@@ -23,7 +24,7 @@ const RQInfiniteQueries: NextPage = () => {
     fetchNextPage,
     isFetching,
     isFetchingNextPage,
-  } = useInfiniteQuery(["colors"], fetchColors, {
+  } = useInfiniteQuery([RQ_KEYS.colors], fetchColors, {
     getNextPageParam: (_lastPage, pages) => {
       return pages.length < 4 ? pages.length + 1 : undefined;
     },

@@ -17,8 +17,6 @@ export default async function handler(
 ) {
   const { method } = req;
 
-  console.log(req.body);
-
   if (method === "GET") {
     res.status(200).json(data.superheroes);
   } else if (method === "POST") {
@@ -31,11 +29,10 @@ export default async function handler(
     };
 
     const filePath = path.join(process.cwd(), "pages/api/data.json");
-    console.log(filePath);
     const data = await fs.readFile(filePath, "utf-8");
     const parsedData = JSON.parse(data);
     parsedData.superheroes = [newHero, ...parsedData.superheroes];
-    await fs.writeFile(filePath, JSON.stringify(parsedData, null, 4));
+    await fs.writeFile(filePath, JSON.stringify(parsedData, null, 2));
 
     res.status(201).json(newHero);
   }

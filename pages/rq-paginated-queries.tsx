@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import { formatErrorMessage } from "../utils";
 import type { Color } from "../types";
 import { useState } from "react";
+import { RQ_KEYS } from "../utils/constants";
 
 const fetchColors = async (pageNumber: number): Promise<Color[]> => {
   const { data } = await axios.get(
@@ -16,7 +17,7 @@ const fetchColors = async (pageNumber: number): Promise<Color[]> => {
 const RQPaginatedQueries: NextPage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const { isLoading, isFetching, isError, error, data } = useQuery(
-    ["colors", pageNumber],
+    [RQ_KEYS.colors, pageNumber],
     () => fetchColors(pageNumber),
     { keepPreviousData: true }
   );

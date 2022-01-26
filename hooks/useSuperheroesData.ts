@@ -1,7 +1,8 @@
-import axios, { AxiosResponse } from "axios";
-import { useMutation, useQuery } from "react-query";
+import axios from "axios";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 import type { Superhero } from "../types";
+import { RQ_KEYS } from "../utils/constants";
 
 export type ShortSuperhero = Omit<Superhero, "alterEgo">;
 
@@ -27,7 +28,7 @@ export const useSuperheroesData = ({
   onSuccess: (data: ShortSuperhero[]) => void;
   onError: (err: Error) => void;
 }) => {
-  return useQuery("superheroes", fetchSuperheroes, {
+  return useQuery(RQ_KEYS.superheroes, fetchSuperheroes, {
     // update cache time, default: 5000
     cacheTime: 3000,
 
@@ -72,5 +73,11 @@ export const useSuperheroesData = ({
 };
 
 export const useAddSuperHeroData = () => {
-  return useMutation(addSuperHero);
+  const queryClient = useQueryClient();
+  return useMutation(addSuperHero, {
+    onSuccess: () => {
+      // need to enabled true in useQuery
+      queryClient.invalidateQueries(RQ_KEYS.superheroes);
+    },
+  });
 };
