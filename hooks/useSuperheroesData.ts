@@ -75,9 +75,16 @@ export const useSuperheroesData = ({
 export const useAddSuperHeroData = () => {
   const queryClient = useQueryClient();
   return useMutation(addSuperHero, {
-    onSuccess: () => {
-      // need to enabled true in useQuery
-      queryClient.invalidateQueries(RQ_KEYS.superheroes);
+    onSuccess: (data) => {
+      // // need to enabled true in useQuery
+      // queryClient.invalidateQueries(RQ_KEYS.superheroes);
+
+      queryClient.setQueriesData<ShortSuperhero[] | undefined>(
+        RQ_KEYS.superheroes,
+        (oldQueryData) => {
+          return oldQueryData && [data, ...oldQueryData];
+        }
+      );
     },
   });
 };
