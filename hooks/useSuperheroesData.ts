@@ -1,23 +1,33 @@
-import axios from "axios";
+// import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 
 import type { Superhero } from "../types";
+import { request } from "../utils/axios";
 import { RQ_KEYS } from "../utils/constants";
 
 export type ShortSuperhero = Omit<Superhero, "alterEgo">;
 
-const fetchSuperheroes = async () => {
-  const { data } = await axios.get<ShortSuperhero[]>(
-    "http://localhost:3000/api/superheroes"
-  );
+const fetchSuperheroes = async (): Promise<ShortSuperhero[]> => {
+  // const { data } = await axios.get<ShortSuperhero[]>(
+  //   "http://localhost:3000/api/superheroes"
+  // );
+  const { data } = await request({ url: "/api/superheroes" });
   return data;
 };
 
-const addSuperHero = async (hero: { name: string; alterEgo: string }) => {
-  const { data } = await axios.post<Superhero>(
-    "http://localhost:3000/api/superheroes",
-    hero
-  );
+const addSuperHero = async (hero: {
+  name: string;
+  alterEgo: string;
+}): Promise<Superhero> => {
+  // const { data } = await axios.post<Superhero>(
+  //   "http://localhost:3000/api/superheroes",
+  //   hero
+  // );
+  const { data } = await request({
+    url: "/api/superheroes",
+    method: "POST",
+    data: hero,
+  });
   return data;
 };
 
